@@ -1,0 +1,10 @@
+<div class="card card-block ">
+  <h4 class="card-title">{{data.id_reclamo}}</h4>
+  <p class="card-text" [hidden]="data.hide">{{data.id_cliente}}</p>
+  <div class="row">
+    <div class="col-md-6"><button class="btn btn-primary" (click)="data.toggle()">Ocultar</button></div>
+    <div class="col-md-6"><button class="btn btn-danger" (click)="data.deleteClaim()">Delete</button></div>
+  </div>
+  
+  
+</div>

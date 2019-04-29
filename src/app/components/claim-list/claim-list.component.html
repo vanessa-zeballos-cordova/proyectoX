@@ -1,0 +1,4 @@
+<claim-form (claimCreate)="addClaim($event)"></claim-form>
+<hr>
+<claim *ngFor="let cla of claims" [claim]="cla"></claim>
+ 

@@ -1,0 +1,12 @@
+<div class="card card-block">
+  <h4 class="card-title">Create Claim</h4>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Input Claim" #claim>
+  </div>
+  <div class="form-group">
+    <input type="text" class="form-control" placeholder="Input Client" #client>
+  </div>
+  <button type="button" class="btn btn-primary" (click) = "createClaim(claim.value, client.value)">
+    Create
+  </button>
+</div>
