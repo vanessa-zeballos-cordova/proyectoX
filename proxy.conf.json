@@ -1,0 +1,8 @@
+{
+  "/proyectoX/**":{
+    "target" : "http://localhost:4200/",
+    "pathRewrite" : {
+      "^/proyectoX" : ""
+    }
+  }
+}

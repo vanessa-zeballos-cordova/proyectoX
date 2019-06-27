@@ -3,9 +3,30 @@ import { LoginService } from '../../services/login.service';
 import { PeticionService } from '../../services/peticion.service';
 import { NgForm } from '@angular/forms';
 import { Login } from '../../models/login.model';
+import { Berp } from '../../models/berp.model';
+import { HttpClient } from '@angular/common/http';
 
+import { Base64 } from '../../../../pxpRestWeb/base64';
+import { MCrypt } from '../../../../pxpRestWeb/mcrypt';
+import { Crypterp } from '../../../../pxpRestWeb/crypterp';
+import { Md5 } from 'md5';
 
- 
+import { Router, ActivatedRoute } from '@angular/router';
+//import { Base64 } from '../../../../pxpRestWeb/base64';
+/*import { Base64 } from 'js-base64';
+import { MCrypt } from 'fdoering-mcrypt';
+import { Rijndael }  from 'rijndael';*/
+
+//import { require } from 'requirejs';
+
+//import { mcrypt } from "fdoering-mcrypt";
+//import * as mcrypt from "fdoering-mcrypt";
+/*import * as Serpent from "../../pxpRestWeb/Serpent";*/
+
+//declare var base64:any;
+//declare var rij:Rijndael;
+/*declare var Rijndael:any;
+declare var Serpent:any;*/
 
 @Component({
   selector: 'app-login',
@@ -18,42 +39,56 @@ export class LoginComponent implements OnInit {
   public login:Login;
   cuentas:any;
   public tipoForm:string;
-
-  constructor(private loginS:LoginService, private peticionS:PeticionService) { 
+  public data:any;
+  private globalBerp : Berp;
+  private success : boolean;
+  //public mcrypt:any;
+  
+  constructor(private loginS:LoginService, private peticionS:PeticionService, private router: Router) {
     this.login =  new Login(0,'','');
     this.tipoForm = 'new';
+    this.success = false;
   }
   
 
   onSubmit(){
+    let passHash = Md5.md6(this.formLogin.value.password);
+    Crypterp.Crypto(this.globalBerp);
+    let paseERP = Crypterp.Encriptar(this.formLogin.value.password);
+    let pass = Base64.encode(MCrypt.Encrypt(this.formLogin.value.username,undefined,passHash,'rijndael-256','ecb'));
+    this.peticionS.ingresarSis(this.formLogin.value.username, paseERP).subscribe(
+      data => {
+        this.data = JSON.parse(JSON.stringify(eval("(" + data + ")")));
 
-    this.peticionS.ingresarSis(this.formLogin.value.username, this.formLogin.value.password).subscribe(
-      result => {
-        if(result.code != 200){
-          console.log('que paso',result.code,result);
+        if(this.data.success){
+          this.router.navigate(["/treeSystem"]);
         }else{
-          console.log('exito');
+          console.log('Credenciales Invalidas');
         }
       },
       error=>{
-        console.log('horror',error);
+        console.log('Error al Ingresar al Sistema',error);
       }  
-    )
+    );
 
   }
 
   ngOnInit() {
     this.cuentas = this.loginS.getCredenciales();
-
     this.peticionS.getDatos().subscribe(
-      result => {
-          if(result.code != 200){
-            console.log('que paso',result.code,result);
+        data => {
+          this.data = JSON.parse(JSON.stringify(eval("(" + data + ")")));
+          //this.data = eval(data.trim());
+          
+          this.globalBerp = new Berp(this.data.e,this.data.k,this.data.m,this.data.p,this.data.success,this.data.x);
+
+          if(this.data.success){
+            console.log('EXITO', this.data);
           }else{
-            console.log('exito');
+            console.log('Favor comunicarse con el Administrador');
           }
       },
-      error=>{
+        error => {
         console.log('horror',error);
       }
     );

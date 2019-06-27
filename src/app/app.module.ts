@@ -6,7 +6,9 @@ import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {CollapseModule} from 'ngx-bootstrap/collapse';
 import {ToastrModule} from 'ngx-toastr';
+
 //import {HttpModule, Http} from '@angular/http';
+
 import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -16,9 +18,9 @@ import { LoginService } from './services/login.service';
 import { PeticionService } from './services/peticion.service';
 import { NavbarService } from './services/navbar.service';
 
-
-
+//import { Routes, RouterModule } from '@angular/router';
 import { routing, appRoutingProviders } from './app.routing';
+
 import { ClaimListComponent } from './components/claim-list/claim-list.component';
 import { ClaimComponent } from './components/claim/claim.component';
 import { ClaimFormComponent } from './components/claim-form/claim-form.component';
